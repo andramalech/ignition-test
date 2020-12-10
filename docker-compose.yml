@@ -1,0 +1,45 @@
+
+version: '3.4'
+
+services:
+  ignition-gateway-1:
+    image: inductiveautomation/ignition:8.1.0
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+
+    ports:
+      - "8088:8088"
+      - "8043:8043"
+      - "8060:8060"
+    command: 
+      -n ignition-gateway-1 -a 127.0.0.1
+   # volumes:
+    #  -gateway-1-data:/usr/local/bin/ignition/data
+  
+  ignition-gateway-2:
+    image: inductiveautomation/ignition:8.1.0
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+
+    ports:
+      - "9088:8088"
+      - "9043:8043"
+      - "9060:8060"
+    command: 
+      -n ignition-gateway-2 -a 127.0.0.1 -h 9088 -s 9043
+  #  volumes:
+ #     - gateway-2-data:/usr/local/bin/ignition/data
+    
+  
+  ignition-db:
+    image: mariadb:10.5.8
+    restart: always
+    environment: 
+      MYSQL_ROOT_PASSWORD: ignition
+      MYSQL_DATABASE: ignition
+#volumes: 
+#  gateway-1-data: {}
+#  gateway-2-data: {}
+
